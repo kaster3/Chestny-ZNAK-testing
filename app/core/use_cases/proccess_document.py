@@ -29,7 +29,7 @@ class ProcessDocumentsInteractor:
             document_data = json.loads(cast(str, transfer_document.document_data))
             logger.debug("document data: %s", document_data)
 
-            # 2) Получаем объекты из документа, включая parent
+            # 2) Получаем объекты из документа, включая содержимое упаковки (дочерний элемент)
             objects = document_data.get("objects", [])
             logger.debug("Objects from document: %s", objects)
             data_models = await self.__get_all_related_objects(objects)
@@ -50,20 +50,20 @@ class ProcessDocumentsInteractor:
             return False
 
     async def __get_all_related_objects(self, objects: list[str]) -> list[Data]:
-        """Собирает все связанные объекты (включая родителя)"""
-        # Сначала думал сделать рекурсией, но по условию уровень вложенности мб только 1,
-        # как я понял, но мб есть смысл заменить
         all_objects = []
-        for _object in objects:  # type: str
-            data: Data = await self.data_repository.get_data_by_object(_object)
-            logger.debug("object parent %s", data.parent)
+
+        for _object in objects:
+            # Добавляем саму упаковку
+            data = await self.data_repository.get_data_by_object(_object)
             if data:
                 all_objects.append(data)
-                if data.parent:
-                    parent_data = await self.data_repository.get_data_by_object(data.parent)
-                    if parent_data:
-                        all_objects.append(parent_data)
+                # Находим все дочерние объекты (содержимое упаковки)
+                child_objects = await self.data_repository.get_data_by_parent(_object)
+                if child_objects:
+                    all_objects.extend(child_objects)
+
         return all_objects
+
 
     async def __update_data_based_on_operation_details(
         self, data_models: list[Data], operation_details: dict[str, dict[str, Any]]
