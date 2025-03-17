@@ -1,0 +1,6 @@
+[database]
+url = "postgresql+asyncpg://user_name:password@localhost:5432/db_name"
+
+[logger]
+log_level = "dev"  # Одно из: "LOCAL", "DEV", "PROD"
+format = "%(asctime)s - %(levelname)s - %(message)s"
