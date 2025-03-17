@@ -23,7 +23,6 @@ class IDataRepository(Repository):
 
     async def get_data_by_object(self, _object: str) -> Data | None:
         data = await self.session.get(Data, _object)
-        print(data.parent)
         return data
 
     async def update_data(self, data: Data) -> None:
