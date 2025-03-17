@@ -18,6 +18,5 @@ class LoadDataInteractor:
         logging.info("Starting load the documents...")
         repository = self.repository
         for document in documents:
-            print(document)
             await repository.load_documents(document)
         logging.info("The documents loaded successfully")
