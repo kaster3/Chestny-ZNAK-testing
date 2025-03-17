@@ -22,11 +22,11 @@ class ILoadDataRepository(Repository):
     """
 
     async def load_data(self, data: dict) -> None:
-        data = Data(**data)
-        self.session.add(data)
+        data_model = Data(**data)
+        self.session.add(data_model)
         await self.session.commit()
 
-    async def load_documents(self, documents: dict) -> None:
-        data = Document(**documents)
-        self.session.add(data)
+    async def load_documents(self, document: dict) -> None:
+        document_model = Document(**document)
+        self.session.add(document_model)
         await self.session.commit()
