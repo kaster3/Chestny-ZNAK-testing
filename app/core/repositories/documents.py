@@ -41,7 +41,7 @@ class IDocumentRepository(Repository):
         stmt = (
             select(Document)
             .where(
-                # Document.document_type == "transfer_document",
+                Document.document_type == "transfer_document",
                 Document.processed_at.is_(None),
             )
             .order_by(Document.received_at)
