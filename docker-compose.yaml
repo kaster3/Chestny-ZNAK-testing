@@ -3,10 +3,6 @@ services:
       container_name: app
       build:
         dockerfile: Dockerfile
-      command:
-        - "python"
-        - "app/main.py"
-      restart: always
       ports:
         - "8000:8000"
       depends_on:
@@ -19,8 +15,6 @@ services:
       restart: always
       env_file:
         - .template.env.docker
-      ports:
-        - "5432:5432"
       volumes:
         - db:/var/lib/postgresql/data
       healthcheck:
