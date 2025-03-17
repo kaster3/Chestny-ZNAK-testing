@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from typing import Protocol
 
+from sqlalchemy import select
+
 from app.core.database.sqlalchemy import Data
 from app.core.repositories.base import Repository
 
@@ -12,6 +14,10 @@ class DataRepository(Protocol):
 
     @abstractmethod
     async def update_data(self, data: Data) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def get_data_by_parent(self, parent_object: str) -> list[Data | None]:
         raise NotImplementedError
 
 
@@ -28,3 +34,8 @@ class IDataRepository(Repository):
     async def update_data(self, data: Data) -> None:
         self.session.add(data)
         await self.session.commit()
+
+    async def get_data_by_parent(self, parent_object: str) -> list[Data | None]:
+        stmt = select(Data).where(Data.parent == parent_object)
+        children_objects = await self.session.scalars(stmt)
+        return list(children_objects)
