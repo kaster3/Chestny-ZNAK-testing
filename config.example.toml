@@ -1,5 +1,5 @@
 [database]
-url = "postgresql+asyncpg://user_name:password@localhost:5432/db_name"
+url = "postgresql+asyncpg://user_name:password@db:5432/db_name"
 
 [logger]
 log_level = "dev"  # Одно из: "LOCAL", "DEV", "PROD"
